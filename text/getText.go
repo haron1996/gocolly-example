@@ -24,36 +24,30 @@ type Comment struct {
 }
 
 func GetText() {
-	// Read the JSON file
+
 	data, err := os.ReadFile("comments.json")
 	if err != nil {
 		log.Fatalf("Error reading file: %v", err)
 	}
 
-	// Define a slice to hold the comments
 	var comments []Comment
 
-	// Unmarshal the JSON data into the slice of comments
 	err = json.Unmarshal(data, &comments)
 	if err != nil {
 		log.Fatalf("Error unmarshalling JSON: %v", err)
 	}
 
-	// Create a new CSV file
 	file, err := os.Create("comments.csv")
 	if err != nil {
 		log.Fatalf("Error creating CSV file: %v", err)
 	}
 	defer file.Close()
 
-	// Create a CSV writer
 	writer := csv.NewWriter(file)
 	defer writer.Flush()
 
-	// Write CSV header
 	writer.Write([]string{"Text"})
 
-	// Write each comment to the CSV file
 	for _, comment := range comments {
 		err := writer.Write([]string{comment.Text})
 		if err != nil {
